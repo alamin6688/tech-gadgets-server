@@ -1,7 +1,7 @@
 const express = require("express");
 const { MongoClient, ServerApiVersion } = require("mongodb");
-const cors = require("cors");
 require("dotenv").config();
+const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -25,22 +25,37 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
 
-    const userCollections = client.db("techGadgets").collection("users");
+    const userCollection = client.db("techGadgets").collection("users");
+    const productCollection = client.db("techGadgets").collection("products");
 
-    //  Post a User to mongodb
+    //  Post User to Mongodb
     app.post("/users", async (req, res) => {
       const user = req.body;
-      console.log(user);
-      const result = await userCollections.insertOne(user);
+      const result = await userCollection.insertOne(user);
       res.send(result);
     });
 
-    //get users
+    // Get users
     app.get("/users", async (req, res) => {
-      const cursor = userCollections.find();
-      const result = await cursor.toArray();
+      const result = await userCollection.find().toArray();
       res.send(result);
     });
+
+    // Post a Product
+    app.post('/addProduct', async (req, res)=>{
+      const productInfo = req.body;
+      const result = await productCollection.insertOne(productInfo);
+      res.send(result);
+    })
+
+    // Get a Product
+    app.get('/addProduct', async (req, res)=>{
+      const id = req.params._id;
+      const result = await productCollection.find().toArray(id);
+      res.send(result);
+    })
+
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
