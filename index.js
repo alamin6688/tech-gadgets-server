@@ -68,13 +68,19 @@ async function run() {
       const query = { _id: new ObjectId(req.params.id) }
       const data = {
         $set : {
-          // name: UpdatedInfo.name,
           name: req.body.name,
           price: req.body.price
         }
       }
       const result = await productCollection.updateOne(query, data)
       res.send(result);
+    })
+
+    // Delete Product API in Cart Page
+    app.delete('/delete/:id', async (req, res)=>{
+      const query = { _id: new ObjectId(req.params.id) };
+      const result = await productCollection.deleteOne(query);
+      res.send(result); 
     })
 
     // Get a Product by email in My Cart Page
