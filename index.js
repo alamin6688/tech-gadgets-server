@@ -47,6 +47,7 @@ async function run() {
       const result = await productCollection.insertOne(productInfo);
       res.send(result);
     })
+
     // Get a Product
     app.get('/addProduct', async (req, res)=>{
       const id = req.params.id;
@@ -54,7 +55,14 @@ async function run() {
       res.send(result);
     })
 
-    // Get a Product by email
+    // Get Product Details API
+    app.get('/singleProduct/:id', async (req, res)=>{
+      const id = { _id: new ObjectId(req.params.id) }
+      const result = await productCollection.findOne(id);
+      res.send(result);
+    })
+
+    // Get a Product by email in My Cart Page
     app.get('/myProduct/:email', async (req, res)=>{
       const email = req.params.email;
       const result = await productCollection.find({email}).toArray();
