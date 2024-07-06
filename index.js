@@ -62,6 +62,21 @@ async function run() {
       res.send(result);
     })
 
+    // Get Product Details Update API
+    app.put('/updateProduct/:id', async (req, res)=>{
+      console.log(req.params.id);
+      const query = { _id: new ObjectId(req.params.id) }
+      const data = {
+        $set : {
+          // name: UpdatedInfo.name,
+          name: req.body.name,
+          price: req.body.price
+        }
+      }
+      const result = await productCollection.updateOne(query, data)
+      res.send(result);
+    })
+
     // Get a Product by email in My Cart Page
     app.get('/myProduct/:email', async (req, res)=>{
       const email = req.params.email;
